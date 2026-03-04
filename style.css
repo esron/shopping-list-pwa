@@ -1,0 +1,349 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    line-height: 1.6;
+    color: #1f2937;
+    background-color: #f9fafb;
+    min-height: 100vh;
+}
+
+/* Container */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+h2 {
+    font-size: 1.25rem;
+    color: #374151;
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.5rem;
+}
+
+/* Install prompt */
+.install-prompt {
+    display: flex;
+    justify-content: center;
+}
+
+#install-button {
+    background: #10b981;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+#install-button:hover {
+    background: #059669;
+}
+
+/* Add item section */
+.add-item-section {
+    margin-bottom: 2rem;
+}
+
+.input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+#item-input {
+    flex: 1;
+    padding: 0.75rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+#item-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+#add-item-form button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+#add-item-form button:hover {
+    background: #1d4ed8;
+}
+
+#add-item-form button:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* Main content */
+main {
+    flex: 1;
+}
+
+/* Shopping list sections */
+.shopping-list-section,
+.completed-section {
+    margin-bottom: 2rem;
+}
+
+.completed-section h2 {
+    color: #6b7280;
+}
+
+/* Item lists */
+.item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Item styles */
+.item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    animation: slideIn 0.3s ease-out;
+}
+
+.item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.item.completed {
+    background: #f9fafb;
+    opacity: 0.7;
+}
+
+.item.completed .item-text {
+    text-decoration: line-through;
+    color: #6b7280;
+}
+
+/* Checkbox */
+.item-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.item-checkbox:hover {
+    border-color: #2563eb;
+}
+
+.item-checkbox.checked {
+    background: #10b981;
+    border-color: #10b981;
+}
+
+.item-checkbox.checked::after {
+    content: '✓';
+    position: absolute;
+    top: -2px;
+    left: 1px;
+    color: white;
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+/* Item text */
+.item-text {
+    flex: 1;
+    font-size: 1rem;
+    word-break: break-word;
+}
+
+/* Delete button */
+.delete-button {
+    background: #ef4444;
+    color: white;
+    border: none;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    transition: all 0.2s;
+    opacity: 0.7;
+}
+
+.delete-button:hover {
+    background: #dc2626;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* Empty states */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.empty-state p:first-child {
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+}
+
+/* Footer stats */
+footer {
+    margin-top: auto;
+    padding-top: 2rem;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    color: #6b7280;
+}
+
+/* Offline indicator */
+.offline-indicator {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f59e0b;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 640px) {
+    .container {
+        padding: 0.5rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    #add-item-form button {
+        padding: 0.75rem;
+    }
+
+    .stats {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+}
+
+/* Dark mode support (optional enhancement) */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #111827;
+        color: #f9fafb;
+    }
+
+    .item {
+        background: #1f2937;
+        color: #f9fafb;
+    }
+
+    .item.completed {
+        background: #374151;
+    }
+
+    #item-input {
+        background: #1f2937;
+        border-color: #374151;
+        color: #f9fafb;
+    }
+
+    .stats {
+        background: #1f2937;
+    }
+
+    h2 {
+        color: #e5e7eb;
+        border-color: #374151;
+    }
+}

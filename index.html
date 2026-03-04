@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2563eb">
+    <title>Shopping List</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛒 Shopping List</h1>
+            <div class="install-prompt" id="install-prompt" style="display: none;">
+                <button id="install-button">Install App</button>
+            </div>
+        </header>
+
+        <main>
+            <!-- Add Item Form -->
+            <section class="add-item-section">
+                <form id="add-item-form">
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            id="item-input"
+                            placeholder="Add item to shopping list..."
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit">Add</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Shopping List -->
+            <section class="shopping-list-section">
+                <h2>Shopping List</h2>
+                <ul id="shopping-list" class="item-list">
+                    <!-- Items will be dynamically added here -->
+                </ul>
+                <div id="empty-state" class="empty-state">
+                    <p>Your shopping list is empty</p>
+                    <p>Add items above to get started!</p>
+                </div>
+            </section>
+
+            <!-- Completed Items -->
+            <section class="completed-section">
+                <h2>Completed Items</h2>
+                <ul id="completed-list" class="item-list completed">
+                    <!-- Completed items will be dynamically added here -->
+                </ul>
+                <div id="completed-empty-state" class="empty-state">
+                    <p>No completed items yet</p>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div class="stats">
+                <span id="active-count">0 items</span>
+                <span id="completed-count">0 completed</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Offline indicator -->
+    <div id="offline-indicator" class="offline-indicator" style="display: none;">
+        <span>You're offline - changes will sync when connection is restored</span>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
