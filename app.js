@@ -73,7 +73,7 @@ class ShoppingListApp {
         // Language switcher
         if (languageSelect && window.i18n) {
             languageSelect.addEventListener('change', (e) => {
-                window.i18n.setLanguage(e.target.value);
+                window.i18n.changeLanguage(e.target.value);
             });
         }
     }
