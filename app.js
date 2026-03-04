@@ -6,13 +6,26 @@ class ShoppingListApp {
         this.init();
     }
 
-    init() {
+    async init() {
         this.loadFromStorage();
+        await this.setupI18n();
         this.setupEventListeners();
         this.setupServiceWorker();
         this.setupPWAInstall();
         this.setupOfflineIndicator();
         this.render();
+    }
+
+    // Setup internationalization
+    async setupI18n() {
+        if (window.i18n) {
+            await window.i18n.init();
+
+            // Listen for language changes
+            window.addEventListener('languageChanged', () => {
+                this.render(); // Re-render to apply new translations
+            });
+        }
     }
 
     // Load data from localStorage
@@ -39,6 +52,7 @@ class ShoppingListApp {
     setupEventListeners() {
         const form = document.getElementById('add-item-form');
         const input = document.getElementById('item-input');
+        const languageSelect = document.getElementById('language-select');
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -55,6 +69,13 @@ class ShoppingListApp {
                 input.value = '';
             }
         });
+
+        // Language switcher
+        if (languageSelect && window.i18n) {
+            languageSelect.addEventListener('change', (e) => {
+                window.i18n.changeLanguage(e.target.value);
+            });
+        }
     }
 
     // Add new item
@@ -125,10 +146,20 @@ class ShoppingListApp {
         li.className = `item ${isCompleted ? 'completed' : ''}`;
         li.dataset.id = item.id;
 
+        // Get localized labels
+        const deleteLabel = window.i18n ? window.i18n.t('ui.actions.delete') : 'Delete item';
+        const toggleLabel = window.i18n ?
+            (isCompleted ? window.i18n.t('ui.actions.uncomplete') : window.i18n.t('ui.actions.complete'))
+            : (isCompleted ? 'Mark as incomplete' : 'Mark as complete');
+
         li.innerHTML = `
-            <div class="item-checkbox ${isCompleted ? 'checked' : ''}" onclick="app.toggleItem('${item.id}')"></div>
+            <div class="item-checkbox ${isCompleted ? 'checked' : ''}"
+                 onclick="app.toggleItem('${item.id}')"
+                 aria-label="${toggleLabel}"
+                 role="button"
+                 tabindex="0"></div>
             <span class="item-text">${this.escapeHtml(item.text)}</span>
-            <button class="delete-button" onclick="app.deleteItem('${item.id}')" aria-label="Delete item">×</button>
+            <button class="delete-button" onclick="app.deleteItem('${item.id}')" aria-label="${deleteLabel}">×</button>
         `;
 
         return li;
@@ -181,11 +212,28 @@ class ShoppingListApp {
         const activeCount = document.getElementById('active-count');
         const completedCount = document.getElementById('completed-count');
 
-        const activeText = this.items.length === 1 ? '1 item' : `${this.items.length} items`;
-        const completedText = this.completedItems.length === 1 ? '1 completed' : `${this.completedItems.length} completed`;
+        if (window.i18n) {
+            const activeText = window.i18n.formatCount(
+                this.items.length,
+                'ui.stats.item',
+                'ui.stats.items'
+            );
+            const completedText = window.i18n.formatCount(
+                this.completedItems.length,
+                'ui.stats.completed',
+                'ui.stats.completed'
+            );
 
-        activeCount.textContent = activeText;
-        completedCount.textContent = completedText;
+            activeCount.textContent = activeText;
+            completedCount.textContent = completedText;
+        } else {
+            // Fallback if i18n is not available
+            const activeText = this.items.length === 1 ? '1 item' : `${this.items.length} items`;
+            const completedText = this.completedItems.length === 1 ? '1 completed' : `${this.completedItems.length} completed`;
+
+            activeCount.textContent = activeText;
+            completedCount.textContent = completedText;
+        }
     }
 
     // Setup service worker
