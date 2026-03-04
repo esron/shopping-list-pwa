@@ -43,7 +43,7 @@ class I18n {
     // Load translation file
     async loadTranslations(lang) {
         try {
-            const response = await fetch(`/locales/${lang}.json`);
+            const response = await fetch(`./locales/${lang}.json`);
             if (response.ok) {
                 this.translations[lang] = await response.json();
             } else {
@@ -161,7 +161,7 @@ class I18n {
     updateManifest(lang) {
         const manifestLink = document.querySelector('link[rel="manifest"]');
         if (manifestLink) {
-            const manifestPath = lang === 'pt' ? '/manifest-pt.json' : '/manifest.json';
+            const manifestPath = lang === 'pt' ? './manifest-pt.json' : './manifest.json';
             manifestLink.href = manifestPath;
         }
     }

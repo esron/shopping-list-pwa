@@ -1,15 +1,15 @@
 // Shopping List PWA Service Worker
 const CACHE_NAME = 'shopping-list-v1';
 const STATIC_CACHE_URLS = [
-    '/',
-    '/index.html',
-    '/style.css',
-    '/app.js',
-    '/i18n.js',
-    '/manifest.json',
-    '/manifest-pt.json',
-    '/locales/en.json',
-    '/locales/pt.json'
+    './',
+    './index.html',
+    './style.css',
+    './app.js',
+    './i18n.js',
+    './manifest.json',
+    './manifest-pt.json',
+    './locales/en.json',
+    './locales/pt.json'
 ];
 
 // Install event - cache static resources
@@ -100,7 +100,7 @@ self.addEventListener('fetch', (event) => {
                     .catch(() => {
                         // If both cache and network fail, return a fallback
                         if (event.request.destination === 'document') {
-                            return caches.match('/index.html');
+                            return caches.match('./index.html');
                         }
                     });
             })
