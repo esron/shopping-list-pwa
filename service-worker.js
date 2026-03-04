@@ -1,15 +1,11 @@
 // Shopping List PWA Service Worker
-const CACHE_NAME = 'shopping-list-v2';
+const CACHE_NAME = 'shopping-list-v1';
 const STATIC_CACHE_URLS = [
     '/',
     '/index.html',
     '/style.css',
     '/app.js',
-    '/i18n.js',
-    '/manifest.json',
-    '/manifest-pt.json',
-    '/locales/en.json',
-    '/locales/pt.json'
+    '/manifest.json'
 ];
 
 // Install event - cache static resources

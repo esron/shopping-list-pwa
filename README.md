@@ -11,8 +11,6 @@ A simple, offline-first Progressive Web App for managing shopping lists.
 - ✅ Responsive design
 - ✅ Dark mode support
 - ✅ Service worker for caching
-- ✅ Multi-language support (English/Portuguese)
-- ✅ Language auto-detection from browser
 
 ## How to Use
 
@@ -29,13 +27,8 @@ shopping_list/
 ├── index.html          # Main HTML file
 ├── style.css           # Styling and responsive design
 ├── app.js              # Main application logic
-├── i18n.js             # Internationalization system
 ├── service-worker.js   # Service worker for offline functionality
-├── manifest.json       # PWA manifest file (English)
-├── manifest-pt.json    # PWA manifest file (Portuguese)
-├── locales/
-│   ├── en.json         # English translations
-│   └── pt.json         # Portuguese translations
+├── manifest.json       # PWA manifest file
 ├── icon-192.png        # App icon (192x192) - placeholder
 ├── icon-512.png        # App icon (512x512) - placeholder
 ├── icon-32.png         # Favicon (32x32) - placeholder
@@ -50,30 +43,11 @@ shopping_list/
 - **Service Worker**: Caches resources for offline use
 - **App Manifest**: Provides installation metadata
 
-## Localization
-
-The app supports multiple languages:
-- **Auto-detection**: Automatically detects browser language
-- **Persistent**: Language preference saved in localStorage
-- **Supported languages**: English (en), Portuguese (pt)
-- **Language switcher**: Available in the top-right corner
-- **Complete localization**: All UI text, placeholders, and aria-labels
-- **PWA manifests**: Language-specific app names and descriptions
-
-### Adding New Languages
-
-1. Create a new locale file in `/locales/[lang-code].json`
-2. Copy the structure from `en.json` and translate all values
-3. Add the language code to `supportedLanguages` in `i18n.js`
-4. Create a new manifest file: `manifest-[lang-code].json`
-5. Update the service worker cache list
-
 ## Local Storage
 
 The app uses browser localStorage to persist data:
 - Shopping list items are stored locally
 - Data persists across browser sessions
-- Language preference is saved
 - No server required
 
 ## Development
