@@ -1,0 +1,51 @@
+{
+  "app": {
+    "title": "Lista de Compras",
+    "name": "App Lista de Compras",
+    "shortName": "Lista de Compras",
+    "description": "Um PWA simples de lista de compras que funciona offline"
+  },
+  "ui": {
+    "header": {
+      "title": "🛒 Lista de Compras",
+      "install": "Instalar App"
+    },
+    "input": {
+      "placeholder": "Adicionar item à lista de compras...",
+      "addButton": "Adicionar"
+    },
+    "sections": {
+      "shoppingList": "Lista de Compras",
+      "completedItems": "Itens Concluídos"
+    },
+    "empty": {
+      "shopping": "Sua lista de compras está vazia",
+      "shoppingSubtext": "Adicione itens acima para começar!",
+      "completed": "Nenhum item concluído ainda"
+    },
+    "stats": {
+      "item": "item",
+      "items": "itens",
+      "completed": "concluídos"
+    },
+    "actions": {
+      "delete": "Excluir item",
+      "complete": "Marcar como concluído",
+      "uncomplete": "Marcar como não concluído"
+    },
+    "offline": "Você está offline - as alterações serão sincronizadas quando a conexão for restaurada",
+    "language": {
+      "label": "Idioma",
+      "english": "English",
+      "portuguese": "Português"
+    }
+  },
+  "messages": {
+    "itemAdded": "Item adicionado à lista",
+    "itemCompleted": "Item marcado como concluído",
+    "itemDeleted": "Item excluído",
+    "dataExported": "Dados exportados com sucesso",
+    "dataImported": "Dados importados com sucesso",
+    "installPrompt": "Instale este app para uma melhor experiência!"
+  }
+}

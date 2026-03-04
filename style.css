@@ -25,17 +25,62 @@ body {
 
 /* Header */
 header {
-    text-align: center;
     margin-bottom: 2rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+}
+
 h1 {
     font-size: 2rem;
     color: #2563eb;
     font-weight: bold;
+    margin: 0;
+}
+
+/* Language selector */
+.language-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-end;
+    min-width: 120px;
+}
+
+.language-selector label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#language-select {
+    padding: 0.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    background: white;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+#language-select:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.install-prompt {
+    display: flex;
+    justify-content: center;
 }
 
 h2 {
@@ -295,6 +340,17 @@ footer {
 @media (max-width: 640px) {
     .container {
         padding: 0.5rem;
+    }
+
+    .header-top {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .language-selector {
+        align-items: center;
+        min-width: auto;
     }
 
     h1 {

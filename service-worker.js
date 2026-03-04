@@ -5,7 +5,11 @@ const STATIC_CACHE_URLS = [
     '/index.html',
     '/style.css',
     '/app.js',
-    '/manifest.json'
+    '/i18n.js',
+    '/manifest.json',
+    '/manifest-pt.json',
+    '/locales/en.json',
+    '/locales/pt.json'
 ];
 
 // Install event - cache static resources
