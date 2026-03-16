@@ -31,7 +31,9 @@
     "actions": {
       "delete": "Delete item",
       "complete": "Mark as complete",
-      "uncomplete": "Mark as incomplete"
+      "uncomplete": "Mark as incomplete",
+      "export": "Export",
+      "import": "Import"
     },
     "offline": "You're offline - changes will sync when connection is restored",
     "language": {
@@ -46,6 +48,7 @@
     "itemDeleted": "Item deleted",
     "dataExported": "Data exported successfully",
     "dataImported": "Data imported successfully",
+    "importError": "Failed to import file. Please ensure it is a valid shopping list JSON file.",
     "installPrompt": "Install this app for the best experience!"
   }
 }

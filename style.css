@@ -353,6 +353,31 @@ footer {
     color: #6b7280;
 }
 
+/* Share actions (Export/Import) */
+.share-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.share-actions button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: white;
+    color: #374151;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.share-actions button:hover {
+    background: #f3f4f6;
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
 /* Offline indicator */
 .offline-indicator {
     position: fixed;
@@ -488,6 +513,18 @@ footer {
 
     .language-option.active {
         background: rgba(37, 99, 235, 0.2);
+        color: #60a5fa;
+    }
+
+    .share-actions button {
+        background: #1f2937;
+        border-color: #374151;
+        color: #e5e7eb;
+    }
+
+    .share-actions button:hover {
+        background: #374151;
+        border-color: #60a5fa;
         color: #60a5fa;
     }
 }

@@ -31,7 +31,9 @@
     "actions": {
       "delete": "Excluir item",
       "complete": "Marcar como concluído",
-      "uncomplete": "Marcar como não concluído"
+      "uncomplete": "Marcar como não concluído",
+      "export": "Exportar",
+      "import": "Importar"
     },
     "offline": "Você está offline - as alterações serão sincronizadas quando a conexão for restaurada",
     "language": {
@@ -46,6 +48,7 @@
     "itemDeleted": "Item excluído",
     "dataExported": "Dados exportados com sucesso",
     "dataImported": "Dados importados com sucesso",
+    "importError": "Falha ao importar arquivo. Verifique se é um arquivo JSON válido da lista de compras.",
     "installPrompt": "Instale este app para uma melhor experiência!"
   }
 }

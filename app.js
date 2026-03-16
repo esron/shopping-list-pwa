@@ -100,6 +100,26 @@ class ShoppingListApp {
                 }
             });
         }
+
+        // Export button
+        const exportButton = document.getElementById('export-button');
+        if (exportButton) {
+            exportButton.addEventListener('click', () => this.triggerExport());
+        }
+
+        // Import button and file input
+        const importButton = document.getElementById('import-button');
+        const importInput = document.getElementById('import-input');
+        if (importButton && importInput) {
+            importButton.addEventListener('click', () => importInput.click());
+            importInput.addEventListener('change', (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                    this.triggerImport(file);
+                    importInput.value = ''; // Reset so same file can be selected again
+                }
+            });
+        }
     }
 
     // Add new item
@@ -339,7 +359,7 @@ class ShoppingListApp {
         this.render();
     }
 
-    // Export data (for backup)
+    // Export data (for backup/sharing)
     exportData() {
         const data = {
             items: this.items,
@@ -347,6 +367,40 @@ class ShoppingListApp {
             exportDate: new Date().toISOString()
         };
         return JSON.stringify(data, null, 2);
+    }
+
+    // Trigger export: download JSON file
+    triggerExport() {
+        const json = this.exportData();
+        const blob = new Blob([json], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `shopping-list-${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    // Trigger import: read file and load items
+    async triggerImport(file) {
+        const showImportError = () => {
+            if (window.i18n) {
+                alert(window.i18n.t('messages.importError'));
+            } else {
+                alert('Failed to import file. Please ensure it is a valid JSON file.');
+            }
+        };
+
+        try {
+            const text = await file.text();
+            const success = this.importData(text);
+            if (!success) {
+                showImportError();
+            }
+        } catch (error) {
+            console.error('Failed to import file:', error);
+            showImportError();
+        }
     }
 
     // Import data (for restore)
