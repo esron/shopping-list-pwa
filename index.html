@@ -23,12 +23,18 @@
         <header>
             <div class="header-top">
                 <h1 data-i18n="ui.header.title">🛒 Shopping List</h1>
-                <div class="language-selector">
-                    <label for="language-select" data-i18n="ui.language.label">Language</label>
-                    <select id="language-select">
-                        <option value="en" data-i18n="ui.language.english">English</option>
-                        <option value="pt" data-i18n="ui.language.portuguese">Português</option>
-                    </select>
+                <div class="language-dropdown">
+                    <button type="button" id="language-button" class="language-button" aria-label="Change language" aria-haspopup="true" aria-expanded="false">
+                        <svg class="globe-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                    </button>
+                    <div id="language-menu" class="language-menu" role="menu" aria-hidden="true">
+                        <button type="button" role="menuitem" class="language-option" data-lang="en" data-i18n="ui.language.english">English</button>
+                        <button type="button" role="menuitem" class="language-option" data-lang="pt" data-i18n="ui.language.portuguese">Português</button>
+                    </div>
                 </div>
             </div>
             <div class="install-prompt" id="install-prompt" style="display: none;">

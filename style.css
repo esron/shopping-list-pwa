@@ -29,6 +29,7 @@ header {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    position: relative;
 }
 
 .header-top {
@@ -46,36 +47,90 @@ h1 {
     margin: 0;
 }
 
-/* Language selector */
-.language-selector {
+/* Language dropdown */
+.language-dropdown {
+    position: relative;
+}
+
+.language-button {
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    align-items: flex-end;
-    min-width: 120px;
-}
-
-.language-selector label {
-    font-size: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
     color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-#language-select {
-    padding: 0.5rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.375rem;
-    background: white;
-    font-size: 0.875rem;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: all 0.2s;
 }
 
-#language-select:focus {
+.language-button:hover {
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+}
+
+.language-button:focus {
     outline: none;
-    border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.language-button[aria-expanded="true"] {
+    background: rgba(37, 99, 235, 0.15);
+    color: #2563eb;
+}
+
+.globe-icon {
+    flex-shrink: 0;
+}
+
+.language-menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    min-width: 140px;
+    padding: 0.25rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e5e7eb;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+}
+
+.language-menu.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.language-option {
+    display: block;
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-radius: 0.375rem;
+    background: transparent;
+    font-size: 0.875rem;
+    text-align: left;
+    cursor: pointer;
+    color: #374151;
+    transition: background 0.15s;
+}
+
+.language-option:hover {
+    background: #f3f4f6;
+}
+
+.language-option.active {
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+    font-weight: 500;
 }
 
 .install-prompt {
@@ -348,9 +403,14 @@ footer {
         align-items: center;
     }
 
-    .language-selector {
-        align-items: center;
-        min-width: auto;
+    .language-dropdown {
+        position: absolute;
+        top: 1rem;
+        right: 0.5rem;
+    }
+
+    header {
+        padding-right: 3rem;
     }
 
     h1 {
@@ -401,5 +461,33 @@ footer {
     h2 {
         color: #e5e7eb;
         border-color: #374151;
+    }
+
+    .language-button {
+        color: #9ca3af;
+    }
+
+    .language-button:hover,
+    .language-button[aria-expanded="true"] {
+        background: rgba(37, 99, 235, 0.2);
+        color: #60a5fa;
+    }
+
+    .language-menu {
+        background: #1f2937;
+        border-color: #374151;
+    }
+
+    .language-option {
+        color: #e5e7eb;
+    }
+
+    .language-option:hover {
+        background: #374151;
+    }
+
+    .language-option.active {
+        background: rgba(37, 99, 235, 0.2);
+        color: #60a5fa;
     }
 }
