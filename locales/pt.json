@@ -33,6 +33,7 @@
       "complete": "Marcar como concluído",
       "uncomplete": "Marcar como não concluído",
       "export": "Exportar",
+      "copy": "Copiar",
       "import": "Importar",
       "paste": "Colar"
     },
@@ -50,6 +51,7 @@
     "dataExported": "Dados exportados com sucesso",
     "dataImported": "Dados importados com sucesso",
     "importError": "Falha ao importar. Cole ou selecione uma lista com um item por linha. Use [x] antes dos itens concluídos.",
+    "copyRequiresHttps": "Copiar requer uma conexão segura (HTTPS). Use Exportar para baixar a lista.",
     "installPrompt": "Instale este app para uma melhor experiência!"
   }
 }

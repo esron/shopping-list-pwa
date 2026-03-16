@@ -33,6 +33,7 @@
       "complete": "Mark as complete",
       "uncomplete": "Mark as incomplete",
       "export": "Export",
+      "copy": "Copy",
       "import": "Import",
       "paste": "Paste"
     },
@@ -50,6 +51,7 @@
     "dataExported": "Data exported successfully",
     "dataImported": "Data imported successfully",
     "importError": "Failed to import. Paste or select a list with one item per line. Use [x] before completed items.",
+    "copyRequiresHttps": "Copy requires a secure connection (HTTPS). Use Export to download the list instead.",
     "installPrompt": "Install this app for the best experience!"
   }
 }

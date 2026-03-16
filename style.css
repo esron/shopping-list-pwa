@@ -353,7 +353,7 @@ footer {
     color: #6b7280;
 }
 
-/* Share actions (Export/Import/Paste) */
+/* Share actions (Export/Copy/Import/Paste) */
 .share-actions {
     display: flex;
     flex-wrap: wrap;
