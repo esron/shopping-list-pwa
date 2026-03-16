@@ -115,10 +115,16 @@ class ShoppingListApp {
             importInput.addEventListener('change', (e) => {
                 const file = e.target.files?.[0];
                 if (file) {
-                    this.triggerImport(file);
-                    importInput.value = ''; // Reset so same file can be selected again
+                    this.triggerImportFromFile(file);
+                    importInput.value = '';
                 }
             });
+        }
+
+        // Paste button (reads from clipboard)
+        const pasteButton = document.getElementById('paste-button');
+        if (pasteButton) {
+            pasteButton.addEventListener('click', () => this.triggerImportFromPaste());
         }
     }
 
@@ -359,67 +365,134 @@ class ShoppingListApp {
         this.render();
     }
 
-    // Export data (for backup/sharing)
-    exportData() {
-        const data = {
-            items: this.items,
-            completedItems: this.completedItems,
-            exportDate: new Date().toISOString()
-        };
-        return JSON.stringify(data, null, 2);
+    // Export data as plain text (for sharing via message, copy/paste)
+    exportAsText() {
+        const lines = [];
+        this.items.forEach(item => {
+            lines.push(`[ ] ${item.text}`);
+        });
+        this.completedItems.forEach(item => {
+            lines.push(`[x] ${item.text}`);
+        });
+        return lines.join('\n');
     }
 
-    // Trigger export: download JSON file
+    // Trigger export: download .txt and copy to clipboard
     triggerExport() {
-        const json = this.exportData();
-        const blob = new Blob([json], { type: 'application/json' });
+        const text = this.exportAsText();
+        const blob = new Blob([text], { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `shopping-list-${new Date().toISOString().slice(0, 10)}.json`;
+        a.download = `shopping-list-${new Date().toISOString().slice(0, 10)}.txt`;
         a.click();
         URL.revokeObjectURL(url);
+
+        // Copy to clipboard for easy pasting into messages
+        navigator.clipboard?.writeText(text).catch(() => {});
     }
 
-    // Trigger import: read file and load items
-    async triggerImport(file) {
+    // Trigger import from file
+    async triggerImportFromFile(file) {
         const showImportError = () => {
             if (window.i18n) {
                 alert(window.i18n.t('messages.importError'));
             } else {
-                alert('Failed to import file. Please ensure it is a valid JSON file.');
+                alert('Failed to import. Use a .txt or .json file, or paste the list text.');
             }
         };
 
         try {
             const text = await file.text();
             const success = this.importData(text);
-            if (!success) {
-                showImportError();
-            }
+            if (!success) showImportError();
         } catch (error) {
             console.error('Failed to import file:', error);
             showImportError();
         }
     }
 
-    // Import data (for restore)
-    importData(jsonData) {
+    // Trigger import from clipboard (for pasting shared list from message)
+    async triggerImportFromPaste() {
+        const showImportError = () => {
+            if (window.i18n) {
+                alert(window.i18n.t('messages.importError'));
+            } else {
+                alert('Failed to import. Paste a list with one item per line, or use [ ] and [x] for completed items.');
+            }
+        };
+
         try {
-            const data = JSON.parse(jsonData);
-            if (data.items && Array.isArray(data.items)) {
-                this.items = data.items;
+            const text = await navigator.clipboard.readText();
+            const success = this.importData(text);
+            if (!success) showImportError();
+        } catch (error) {
+            console.error('Failed to read clipboard:', error);
+            showImportError();
+        }
+    }
+
+    // Import data: accepts JSON or plain text ([ ] / [x] item per line)
+    importData(text) {
+        const trimmed = text.trim();
+        if (!trimmed) return false;
+
+        // Try JSON first (backward compatibility)
+        if (trimmed.startsWith('{')) {
+            try {
+                const data = JSON.parse(text);
+                const hasItems = Array.isArray(data.items);
+                const hasCompletedItems = Array.isArray(data.completedItems);
+
+                if (!hasItems && !hasCompletedItems) return false;
+
+                this.items = hasItems ? data.items : [];
+                this.completedItems = hasCompletedItems ? data.completedItems : [];
+                this.saveToStorage();
+                this.render();
+                return true;
+            } catch {
+                return false;
             }
-            if (data.completedItems && Array.isArray(data.completedItems)) {
-                this.completedItems = data.completedItems;
+        }
+
+        // Parse plain text format
+        const items = [];
+        const completedItems = [];
+        const lines = text.split(/\r?\n/);
+
+        for (const line of lines) {
+            const t = line.trim();
+            if (!t) continue;
+
+            if (t.startsWith('[x] ') || t.startsWith('[X] ')) {
+                completedItems.push(this.createItem(t.slice(4).trim(), true));
+            } else if (!t.startsWith('[x] ') && !t.startsWith('[X] ')) {
+                const itemText = t.startsWith('[ ] ') ? t.slice(4).trim() : t;
+                if (itemText) items.push(this.createItem(itemText, false));
             }
+        }
+
+        if (items.length > 0 || completedItems.length > 0) {
+            this.items = items;
+            this.completedItems = completedItems;
             this.saveToStorage();
             this.render();
             return true;
-        } catch (error) {
-            console.error('Failed to import data:', error);
-            return false;
         }
+
+        return false;
+    }
+
+    createItem(text, completed = false) {
+        const item = {
+            id: Date.now().toString() + Math.random().toString(36).slice(2),
+            text,
+            completed,
+            createdAt: new Date().toISOString()
+        };
+        if (completed) item.completedAt = new Date().toISOString();
+        return item;
     }
 }
 

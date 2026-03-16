@@ -33,7 +33,8 @@
       "complete": "Marcar como concluído",
       "uncomplete": "Marcar como não concluído",
       "export": "Exportar",
-      "import": "Importar"
+      "import": "Importar",
+      "paste": "Colar"
     },
     "offline": "Você está offline - as alterações serão sincronizadas quando a conexão for restaurada",
     "language": {
@@ -48,7 +49,7 @@
     "itemDeleted": "Item excluído",
     "dataExported": "Dados exportados com sucesso",
     "dataImported": "Dados importados com sucesso",
-    "importError": "Falha ao importar arquivo. Verifique se é um arquivo JSON válido da lista de compras.",
+    "importError": "Falha ao importar. Cole ou selecione uma lista com um item por linha. Use [x] antes dos itens concluídos.",
     "installPrompt": "Instale este app para uma melhor experiência!"
   }
 }

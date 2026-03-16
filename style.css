@@ -353,9 +353,10 @@ footer {
     color: #6b7280;
 }
 
-/* Share actions (Export/Import) */
+/* Share actions (Export/Import/Paste) */
 .share-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     justify-content: center;
     margin-top: 1rem;

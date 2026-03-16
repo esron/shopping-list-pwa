@@ -33,7 +33,8 @@
       "complete": "Mark as complete",
       "uncomplete": "Mark as incomplete",
       "export": "Export",
-      "import": "Import"
+      "import": "Import",
+      "paste": "Paste"
     },
     "offline": "You're offline - changes will sync when connection is restored",
     "language": {
@@ -48,7 +49,7 @@
     "itemDeleted": "Item deleted",
     "dataExported": "Data exported successfully",
     "dataImported": "Data imported successfully",
-    "importError": "Failed to import file. Please ensure it is a valid shopping list JSON file.",
+    "importError": "Failed to import. Paste or select a list with one item per line. Use [x] before completed items.",
     "installPrompt": "Install this app for the best experience!"
   }
 }
