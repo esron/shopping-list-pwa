@@ -107,6 +107,12 @@ class ShoppingListApp {
             exportButton.addEventListener('click', () => this.triggerExport());
         }
 
+        // Copy button
+        const copyButton = document.getElementById('copy-button');
+        if (copyButton) {
+            copyButton.addEventListener('click', () => this.triggerCopy());
+        }
+
         // Import button and file input
         const importButton = document.getElementById('import-button');
         const importInput = document.getElementById('import-input');
@@ -377,7 +383,7 @@ class ShoppingListApp {
         return lines.join('\n');
     }
 
-    // Trigger export: download .txt and copy to clipboard
+    // Trigger export: download .txt file
     triggerExport() {
         const text = this.exportAsText();
         const blob = new Blob([text], { type: 'text/plain' });
@@ -387,9 +393,25 @@ class ShoppingListApp {
         a.download = `shopping-list-${new Date().toISOString().slice(0, 10)}.txt`;
         a.click();
         URL.revokeObjectURL(url);
+    }
 
-        // Copy to clipboard for easy pasting into messages
-        navigator.clipboard?.writeText(text).catch(() => {});
+    // Copy list as text to clipboard (Clipboard API only; requires HTTPS)
+    async triggerCopy() {
+        const text = this.exportAsText();
+        if (!navigator.clipboard || !window.isSecureContext) {
+            this.showCopyFallbackMessage();
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(text);
+        } catch {
+            this.showCopyFallbackMessage();
+        }
+    }
+
+    showCopyFallbackMessage() {
+        const msg = window.i18n?.t('messages.copyRequiresHttps') ?? 'Copy requires a secure connection (HTTPS). Use Export to download the list instead.';
+        alert(msg);
     }
 
     // Trigger import from file
