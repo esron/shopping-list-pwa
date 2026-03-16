@@ -52,7 +52,8 @@ class ShoppingListApp {
     setupEventListeners() {
         const form = document.getElementById('add-item-form');
         const input = document.getElementById('item-input');
-        const languageSelect = document.getElementById('language-select');
+        const languageButton = document.getElementById('language-button');
+        const languageMenu = document.getElementById('language-menu');
 
         form.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -70,10 +71,33 @@ class ShoppingListApp {
             }
         });
 
-        // Language switcher
-        if (languageSelect && window.i18n) {
-            languageSelect.addEventListener('change', (e) => {
-                window.i18n.changeLanguage(e.target.value);
+        // Language dropdown
+        if (languageButton && languageMenu && window.i18n) {
+            const setMenuState = (open) => {
+                languageMenu.classList.toggle('open', open);
+                languageButton.setAttribute('aria-expanded', open);
+                languageMenu.setAttribute('aria-hidden', !open);
+            };
+
+            languageButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isOpen = !languageMenu.classList.contains('open');
+                setMenuState(isOpen);
+            });
+
+            languageMenu.querySelectorAll('.language-option').forEach(option => {
+                option.addEventListener('click', (e) => {
+                    const lang = e.target.dataset.lang;
+                    window.i18n.changeLanguage(lang);
+                    setMenuState(false);
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!languageMenu.contains(e.target) && !languageButton.contains(e.target)) {
+                    setMenuState(false);
+                }
             });
         }
     }

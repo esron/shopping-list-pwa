@@ -33,11 +33,8 @@ class I18n {
         // Update manifest for PWA
         this.updateManifest(this.currentLang);
 
-        // Set language selector value
-        const selector = document.getElementById('language-select');
-        if (selector) {
-            selector.value = this.currentLang;
-        }
+        // Update language dropdown active state
+        this.updateLanguageDropdown();
     }
 
     // Load translation file
@@ -133,12 +130,22 @@ class I18n {
         // Update manifest link for PWA
         this.updateManifest(newLang);
 
+        // Update language dropdown active state
+        this.updateLanguageDropdown();
+
         // Trigger custom event for other components to react
         window.dispatchEvent(new CustomEvent('languageChanged', {
             detail: { language: newLang }
         }));
 
         return true;
+    }
+
+    // Update language dropdown to show current selection
+    updateLanguageDropdown() {
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.classList.toggle('active', option.dataset.lang === this.currentLang);
+        });
     }
 
     // Get current language
