@@ -123,6 +123,16 @@
         <span data-i18n="ui.offline">You're offline - changes will sync when connection is restored</span>
     </div>
 
+    <!-- Update available banner -->
+    <div id="update-banner" class="update-banner" style="display: none;">
+        <div class="update-content">
+            <span class="update-icon">↻</span>
+            <span class="update-message" data-i18n="ui.update.message">New version available!</span>
+            <button id="update-button" class="update-button" data-i18n="ui.update.button">Update Now</button>
+            <button id="dismiss-update" class="dismiss-update" aria-label="Dismiss">×</button>
+        </div>
+    </div>
+
     <script src="i18n.js"></script>
     <script src="app.js"></script>
 </body>

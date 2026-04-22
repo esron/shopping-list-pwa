@@ -42,6 +42,10 @@
       "paste": "Colar"
     },
     "offline": "Você está offline - as alterações serão sincronizadas quando a conexão for restaurada",
+    "update": {
+      "message": "Nova versão disponível!",
+      "button": "Atualizar Agora"
+    },
     "language": {
       "label": "Idioma",
       "english": "English",

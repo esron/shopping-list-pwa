@@ -42,6 +42,10 @@
       "paste": "Paste"
     },
     "offline": "You're offline - changes will sync when connection is restored",
+    "update": {
+      "message": "New version available!",
+      "button": "Update Now"
+    },
     "language": {
       "label": "Language",
       "english": "English",

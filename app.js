@@ -357,14 +357,63 @@ class ShoppingListApp {
                 const registration = await navigator.serviceWorker.register('./service-worker.js');
                 console.log('Service Worker registered successfully:', registration);
 
+                // Check for updates every 60 seconds
+                setInterval(() => {
+                    registration.update();
+                }, 60000);
+
                 // Listen for updates
                 registration.addEventListener('updatefound', () => {
-                    console.log('New version available');
-                    // You could show a notification to the user here
+                    const newWorker = registration.installing;
+                    console.log('New version found, installing...');
+
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // New service worker is installed but waiting to activate
+                            console.log('New version available!');
+                            this.showUpdateBanner(registration);
+                        }
+                    });
+                });
+
+                // Listen for when the new service worker takes control
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('New service worker activated, reloading...');
+                    window.location.reload();
                 });
             } catch (error) {
                 console.log('Service Worker registration failed:', error);
             }
+        }
+    }
+
+    // Show update available banner
+    showUpdateBanner(registration) {
+        const updateBanner = document.getElementById('update-banner');
+        const updateButton = document.getElementById('update-button');
+        const dismissButton = document.getElementById('dismiss-update');
+
+        if (!updateBanner) return;
+
+        // Show the banner
+        updateBanner.style.display = 'block';
+
+        // Update button - activate new service worker
+        if (updateButton) {
+            updateButton.addEventListener('click', () => {
+                const waitingWorker = registration.waiting;
+                if (waitingWorker) {
+                    // Tell the waiting service worker to skip waiting
+                    waitingWorker.postMessage({ type: 'SKIP_WAITING' });
+                }
+            }, { once: true });
+        }
+
+        // Dismiss button - hide banner
+        if (dismissButton) {
+            dismissButton.addEventListener('click', () => {
+                updateBanner.style.display = 'none';
+            }, { once: true });
         }
     }
 
