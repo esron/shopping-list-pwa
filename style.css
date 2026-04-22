@@ -713,21 +713,56 @@ footer {
     transform: translateX(-50%);
     background: var(--ink-black);
     color: var(--paper-yellow);
-    padding: 0.75rem 1.5rem;
+    padding: 0.75rem 1rem;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.75rem;
     font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
     z-index: 1000;
     animation: slideUp 0.3s ease-out;
     border: 2px solid var(--ink-black);
     box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 90%;
 }
 
-.offline-indicator::before {
+.offline-message {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.offline-message::before {
     content: '⚠ ';
     color: var(--receipt-red);
+}
+
+.dismiss-offline {
+    background: transparent;
+    color: var(--paper-yellow);
+    border: none;
+    width: 1.75rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.15s;
+    opacity: 0.7;
+}
+
+.dismiss-offline:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.dismiss-offline:focus {
+    outline: none;
 }
 
 /* Update available banner - Receipt notification style */
@@ -987,6 +1022,24 @@ footer {
     }
 
     .dismiss-update {
+        width: 1.5rem;
+        height: 1.5rem;
+        font-size: 1.25rem;
+    }
+
+    /* Offline indicator responsive */
+    .offline-indicator {
+        bottom: 0.5rem;
+        padding: 0.625rem 0.75rem;
+        font-size: 0.6875rem;
+        gap: 0.5rem;
+    }
+
+    .offline-message {
+        font-size: 0.6875rem;
+    }
+
+    .dismiss-offline {
         width: 1.5rem;
         height: 1.5rem;
         font-size: 1.25rem;

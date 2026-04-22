@@ -455,17 +455,25 @@ class ShoppingListApp {
     // Setup offline indicator
     setupOfflineIndicator() {
         const offlineIndicator = document.getElementById('offline-indicator');
+        const dismissOffline = document.getElementById('dismiss-offline');
 
         const updateOnlineStatus = () => {
             if (navigator.onLine) {
                 offlineIndicator.style.display = 'none';
             } else {
-                offlineIndicator.style.display = 'block';
+                offlineIndicator.style.display = 'flex';
             }
         };
 
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
+
+        // Dismiss button
+        if (dismissOffline) {
+            dismissOffline.addEventListener('click', () => {
+                offlineIndicator.style.display = 'none';
+            });
+        }
 
         // Initial check
         updateOnlineStatus();
