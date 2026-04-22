@@ -3,6 +3,7 @@ class ShoppingListApp {
     constructor() {
         this.items = [];
         this.completedItems = [];
+        this.searchQuery = '';
         this.init();
     }
 
@@ -132,6 +133,46 @@ class ShoppingListApp {
         if (pasteButton) {
             pasteButton.addEventListener('click', () => this.triggerImportFromPaste());
         }
+
+        // Search input
+        const searchInput = document.getElementById('search-input');
+        const clearSearch = document.getElementById('clear-search');
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                this.searchQuery = e.target.value.toLowerCase().trim();
+                this.render();
+
+                // Show/hide clear button
+                if (clearSearch) {
+                    clearSearch.style.display = this.searchQuery ? 'flex' : 'none';
+                }
+            });
+
+            // Clear search on escape
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchInput.value = '';
+                    this.searchQuery = '';
+                    this.render();
+                    if (clearSearch) {
+                        clearSearch.style.display = 'none';
+                    }
+                }
+            });
+        }
+
+        // Clear search button
+        if (clearSearch) {
+            clearSearch.addEventListener('click', () => {
+                if (searchInput) {
+                    searchInput.value = '';
+                    this.searchQuery = '';
+                    this.render();
+                    clearSearch.style.display = 'none';
+                    searchInput.focus();
+                }
+            });
+        }
     }
 
     // Add new item
@@ -227,6 +268,16 @@ class ShoppingListApp {
         return div.innerHTML;
     }
 
+    // Filter items based on search query
+    filterItems(items) {
+        if (!this.searchQuery) {
+            return items;
+        }
+        return items.filter(item =>
+            item.text.toLowerCase().includes(this.searchQuery)
+        );
+    }
+
     // Render the lists
     render() {
         const activeList = document.getElementById('shopping-list');
@@ -238,12 +289,18 @@ class ShoppingListApp {
         activeList.innerHTML = '';
         completedList.innerHTML = '';
 
+        // Filter items based on search query
+        const filteredItems = this.filterItems(this.items);
+        const filteredCompleted = this.filterItems(this.completedItems);
+
         // Render active items
         if (this.items.length === 0) {
             emptyState.style.display = 'block';
+        } else if (filteredItems.length === 0) {
+            emptyState.style.display = 'block';
         } else {
             emptyState.style.display = 'none';
-            this.items.forEach(item => {
+            filteredItems.forEach(item => {
                 activeList.appendChild(this.createItemElement(item, false));
             });
         }
@@ -251,9 +308,11 @@ class ShoppingListApp {
         // Render completed items
         if (this.completedItems.length === 0) {
             completedEmptyState.style.display = 'block';
+        } else if (filteredCompleted.length === 0) {
+            completedEmptyState.style.display = 'block';
         } else {
             completedEmptyState.style.display = 'none';
-            this.completedItems.forEach(item => {
+            filteredCompleted.forEach(item => {
                 completedList.appendChild(this.createItemElement(item, true));
             });
         }
