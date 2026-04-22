@@ -89,6 +89,10 @@
                     <p data-i18n="ui.empty.shopping">Your shopping list is empty</p>
                     <p data-i18n="ui.empty.shoppingSubtext">Add items above to get started!</p>
                 </div>
+                <div id="active-total" class="list-total" style="display: none;">
+                    <span class="total-label" data-i18n="ui.item.total">TOTAL</span>
+                    <span id="active-total-amount" class="total-amount">$0.00</span>
+                </div>
             </section>
 
             <!-- Completed Items -->
@@ -99,6 +103,10 @@
                 </ul>
                 <div id="completed-empty-state" class="empty-state">
                     <p data-i18n="ui.empty.completed">No completed items yet</p>
+                </div>
+                <div id="completed-total" class="list-total" style="display: none;">
+                    <span class="total-label" data-i18n="ui.item.total">TOTAL</span>
+                    <span id="completed-total-amount" class="total-amount">$0.00</span>
                 </div>
             </section>
         </main>

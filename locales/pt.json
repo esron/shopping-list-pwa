@@ -37,7 +37,15 @@
       "complete": "Marcar como concluído",
       "uncomplete": "Marcar como não concluído",
       "copy": "Copiar",
-      "paste": "Colar"
+      "paste": "Colar",
+      "edit": "Editar",
+      "save": "Salvar",
+      "cancel": "Cancelar"
+    },
+    "item": {
+      "quantity": "Qtd",
+      "price": "Preço",
+      "total": "TOTAL"
     },
     "offline": "Você está offline - as alterações serão sincronizadas quando a conexão for restaurada",
     "update": {

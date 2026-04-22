@@ -37,7 +37,15 @@
       "complete": "Mark as complete",
       "uncomplete": "Mark as incomplete",
       "copy": "Copy",
-      "paste": "Paste"
+      "paste": "Paste",
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "item": {
+      "quantity": "Qty",
+      "price": "Price",
+      "total": "TOTAL"
     },
     "offline": "You're offline - changes will sync when connection is restored",
     "update": {

@@ -224,9 +224,30 @@ class ShoppingListApp {
         li.dataset.id = item.id;
 
         const deleteLabel = window.i18n ? window.i18n.t('ui.actions.delete') : 'Delete item';
+        const editLabel = window.i18n ? window.i18n.t('ui.actions.edit') : 'Edit';
         const toggleLabel = window.i18n ?
             (isCompleted ? window.i18n.t('ui.actions.uncomplete') : window.i18n.t('ui.actions.complete'))
             : (isCompleted ? 'Mark as incomplete' : 'Mark as complete');
+
+        const quantity = item.quantity || '';
+        const price = item.price || '';
+        const hasDetails = item.quantity || item.price;
+
+        // Receipt-style display
+        let detailsHTML = '';
+        if (hasDetails) {
+            const qty = item.quantity || 1;
+            const priceFormatted = this.formatPrice(item.price || 0);
+            const lineTotal = this.formatPrice((item.price || 0) * qty);
+
+            detailsHTML = `
+                <div class="item-details">
+                    <span class="item-quantity">${qty}×</span>
+                    <span class="item-price">${priceFormatted}</span>
+                    <span class="item-line-total">${lineTotal}</span>
+                </div>
+            `;
+        }
 
         li.innerHTML = `
             <div class="item-checkbox ${isCompleted ? 'checked' : ''}"
@@ -234,11 +255,69 @@ class ShoppingListApp {
                  aria-label="${toggleLabel}"
                  role="button"
                  tabindex="0"></div>
-            <span class="item-text">${this.escapeHtml(item.text)}</span>
+            <div class="item-content">
+                <span class="item-text">${this.escapeHtml(item.text)}</span>
+                ${detailsHTML}
+            </div>
+            <button class="edit-button" onclick="app.showEditForm('${item.id}')" aria-label="${editLabel}">✎</button>
             <button class="delete-button" onclick="app.deleteItem('${item.id}')" aria-label="${deleteLabel}">×</button>
         `;
 
         return li;
+    }
+
+    // Show edit form for item
+    showEditForm(id) {
+        const item = this.items.find(i => i.id === id) || this.completedItems.find(i => i.id === id);
+        if (!item) return;
+
+        const listItem = document.querySelector(`.item[data-id="${id}"]`);
+        if (!listItem) return;
+
+        const qtyLabel = window.i18n ? window.i18n.t('ui.item.quantity') : 'Qty';
+        const priceLabel = window.i18n ? window.i18n.t('ui.item.price') : 'Price';
+        const saveLabel = window.i18n ? window.i18n.t('ui.actions.save') : 'Save';
+        const cancelLabel = window.i18n ? window.i18n.t('ui.actions.cancel') : 'Cancel';
+
+        const lang = window.i18n?.currentLang || 'en';
+        const pricePlaceholder = lang === 'pt' ? '0,00' : '0.00';
+
+        listItem.classList.add('editing');
+        listItem.innerHTML = `
+            <div class="edit-form">
+                <div class="edit-row">
+                    <label>${qtyLabel}</label>
+                    <input type="number" class="edit-quantity" value="${item.quantity || ''}" min="0" step="1" placeholder="1">
+                </div>
+                <div class="edit-row">
+                    <label>${priceLabel}</label>
+                    <input type="text" class="edit-price" value="${item.price || ''}" placeholder="${pricePlaceholder}">
+                </div>
+                <div class="edit-actions">
+                    <button class="save-button">${saveLabel}</button>
+                    <button class="cancel-button">${cancelLabel}</button>
+                </div>
+            </div>
+        `;
+
+        // Event handlers
+        const saveBtn = listItem.querySelector('.save-button');
+        const cancelBtn = listItem.querySelector('.cancel-button');
+        const qtyInput = listItem.querySelector('.edit-quantity');
+        const priceInput = listItem.querySelector('.edit-price');
+
+        saveBtn.addEventListener('click', () => {
+            const quantity = qtyInput.value ? parseInt(qtyInput.value) : null;
+            const price = this.parsePrice(priceInput.value);
+            this.updateItemDetails(id, quantity, price);
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            this.render();
+        });
+
+        // Auto-focus quantity input
+        qtyInput.focus();
     }
 
     // Escape HTML to prevent XSS
@@ -246,6 +325,64 @@ class ShoppingListApp {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    // Format price based on current language
+    formatPrice(price) {
+        if (!price || price === 0) return '';
+
+        const lang = window.i18n?.currentLang || 'en';
+
+        if (lang === 'pt') {
+            // Brazilian Real: R$ 1.234,56
+            return 'R$ ' + price.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        } else {
+            // US Dollar: $1,234.56
+            return '$' + price.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+    }
+
+    // Parse price input based on current language
+    parsePrice(input) {
+        if (!input) return null;
+
+        const lang = window.i18n?.currentLang || 'en';
+        let cleaned = input.replace(/[R$\s]/g, '');
+
+        if (lang === 'pt') {
+            // Convert PT format (1.234,56) to number
+            cleaned = cleaned.replace(/\./g, '').replace(',', '.');
+        } else {
+            // Convert EN format (1,234.56) to number
+            cleaned = cleaned.replace(/,/g, '');
+        }
+
+        const num = parseFloat(cleaned);
+        return isNaN(num) ? null : num;
+    }
+
+    // Update item quantity and price
+    updateItemDetails(id, quantity, price) {
+        let item = this.items.find(i => i.id === id);
+        if (!item) {
+            item = this.completedItems.find(i => i.id === id);
+        }
+
+        if (item) {
+            item.quantity = quantity || null;
+            item.price = price || null;
+            this.saveToStorage();
+            this.render();
+        }
+    }
+
+    // Calculate total for a list of items
+    calculateTotal(items) {
+        return items.reduce((total, item) => {
+            const quantity = item.quantity || 1;
+            const price = item.price || 0;
+            return total + (quantity * price);
+        }, 0);
     }
 
     // Filter items based on search query
@@ -327,6 +464,35 @@ class ShoppingListApp {
 
             activeCount.textContent = activeText;
             completedCount.textContent = completedText;
+        }
+
+        // Update totals
+        this.updateTotals();
+    }
+
+    updateTotals() {
+        const activeTotal = this.calculateTotal(this.items);
+        const completedTotal = this.calculateTotal(this.completedItems);
+
+        const activeTotalDiv = document.getElementById('active-total');
+        const activeTotalAmount = document.getElementById('active-total-amount');
+        const completedTotalDiv = document.getElementById('completed-total');
+        const completedTotalAmount = document.getElementById('completed-total-amount');
+
+        // Show/hide active total
+        if (activeTotal > 0) {
+            activeTotalDiv.style.display = 'flex';
+            activeTotalAmount.textContent = this.formatPrice(activeTotal);
+        } else {
+            activeTotalDiv.style.display = 'none';
+        }
+
+        // Show/hide completed total
+        if (completedTotal > 0) {
+            completedTotalDiv.style.display = 'flex';
+            completedTotalAmount.textContent = this.formatPrice(completedTotal);
+        } else {
+            completedTotalDiv.style.display = 'none';
         }
     }
 
