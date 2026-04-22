@@ -102,30 +102,10 @@ class ShoppingListApp {
             });
         }
 
-        // Export button
-        const exportButton = document.getElementById('export-button');
-        if (exportButton) {
-            exportButton.addEventListener('click', () => this.triggerExport());
-        }
-
         // Copy button
         const copyButton = document.getElementById('copy-button');
         if (copyButton) {
             copyButton.addEventListener('click', () => this.triggerCopy());
-        }
-
-        // Import button and file input
-        const importButton = document.getElementById('import-button');
-        const importInput = document.getElementById('import-input');
-        if (importButton && importInput) {
-            importButton.addEventListener('click', () => importInput.click());
-            importInput.addEventListener('change', (e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                    this.triggerImportFromFile(file);
-                    importInput.value = '';
-                }
-            });
         }
 
         // Paste button (reads from clipboard)
@@ -500,17 +480,6 @@ class ShoppingListApp {
     }
 
     // Trigger export: download .txt file
-    triggerExport() {
-        const text = this.exportAsText();
-        const blob = new Blob([text], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `shopping-list-${new Date().toISOString().slice(0, 10)}.txt`;
-        a.click();
-        URL.revokeObjectURL(url);
-    }
-
     // Copy list as text to clipboard (Clipboard API only; requires HTTPS)
     async triggerCopy() {
         const text = this.exportAsText();
@@ -526,28 +495,8 @@ class ShoppingListApp {
     }
 
     showCopyFallbackMessage() {
-        const msg = window.i18n?.t('messages.copyRequiresHttps') ?? 'Copy requires a secure connection (HTTPS). Use Export to download the list instead.';
+        const msg = window.i18n?.t('messages.copyRequiresHttps') ?? 'Copy requires a secure connection (HTTPS).';
         alert(msg);
-    }
-
-    // Trigger import from file
-    async triggerImportFromFile(file) {
-        const showImportError = () => {
-            if (window.i18n) {
-                alert(window.i18n.t('messages.importError'));
-            } else {
-                alert('Failed to import. Use a .txt or .json file, or paste the list text.');
-            }
-        };
-
-        try {
-            const text = await file.text();
-            const success = this.importData(text);
-            if (!success) showImportError();
-        } catch (error) {
-            console.error('Failed to import file:', error);
-            showImportError();
-        }
     }
 
     // Trigger import from clipboard (for pasting shared list from message)

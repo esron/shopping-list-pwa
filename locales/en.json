@@ -36,9 +36,7 @@
       "delete": "Delete item",
       "complete": "Mark as complete",
       "uncomplete": "Mark as incomplete",
-      "export": "Export",
       "copy": "Copy",
-      "import": "Import",
       "paste": "Paste"
     },
     "offline": "You're offline - changes will sync when connection is restored",
@@ -56,10 +54,8 @@
     "itemAdded": "Item added to list",
     "itemCompleted": "Item marked as completed",
     "itemDeleted": "Item deleted",
-    "dataExported": "Data exported successfully",
-    "dataImported": "Data imported successfully",
-    "importError": "Failed to import. Paste or select a list with one item per line. Use [x] before completed items.",
-    "copyRequiresHttps": "Copy requires a secure connection (HTTPS). Use Export to download the list instead.",
+    "importError": "Failed to import. Paste a list with one item per line. Use [x] before completed items.",
+    "copyRequiresHttps": "Copy requires a secure connection (HTTPS).",
     "installPrompt": "Install this app for the best experience!"
   }
 }

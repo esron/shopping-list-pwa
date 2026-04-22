@@ -1,5 +1,5 @@
 // Shopping List PWA Service Worker
-const CACHE_NAME = 'shopping-list-v5';
+const CACHE_NAME = 'shopping-list-v6';
 const STATIC_CACHE_URLS = [
     './',
     './index.html',
