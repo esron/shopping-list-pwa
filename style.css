@@ -466,6 +466,47 @@ h2::before {
     animation: fadeSlideDown 0.6s ease-out 0.3s backwards;
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px dashed var(--dotted-line);
+}
+
+.section-header h2 {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.sort-button {
+    background: transparent;
+    border: 1px solid var(--ink-black);
+    color: var(--ink-black);
+    padding: 0.25rem 0.5rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.sort-button:hover {
+    background: var(--ink-black);
+    color: var(--paper-yellow);
+}
+
+.sort-button:active {
+    transform: translateY(1px);
+}
+
 .completed-section {
     margin-bottom: 2rem;
     animation: fadeSlideDown 0.6s ease-out 0.4s backwards;
@@ -492,9 +533,12 @@ h2::before {
     background: transparent;
     border-bottom: 1px dotted var(--dotted-line);
     transition: all 0.2s;
-    animation: printLine 0.3s ease-out;
     position: relative;
     font-size: 0.9375rem;
+}
+
+.item.new-item {
+    animation: printLine 0.3s ease-out;
 }
 
 .item:hover {
@@ -532,7 +576,6 @@ h2::before {
 .item-checkbox.checked {
     background: var(--ink-black);
     border-color: var(--ink-black);
-    animation: checkPop 0.3s ease-out;
 }
 
 /* X mark instead of checkmark for receipt aesthetic */

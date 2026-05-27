@@ -81,7 +81,12 @@
 
             <!-- Shopping List -->
             <section class="shopping-list-section">
-                <h2 data-i18n="ui.sections.shoppingList">Shopping List</h2>
+                <div class="section-header">
+                    <h2 data-i18n="ui.sections.shoppingList">Shopping List</h2>
+                    <button type="button" id="sort-button" class="sort-button" aria-label="Sort active items alphabetically" data-i18n-aria-label="ui.actions.sort">
+                        <span class="sort-icon">⇅</span> <span id="sort-label">Sort</span>
+                    </button>
+                </div>
                 <ul id="shopping-list" class="item-list">
                     <!-- Items will be dynamically added here -->
                 </ul>

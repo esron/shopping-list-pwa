@@ -40,12 +40,18 @@
       "paste": "Colar",
       "edit": "Editar",
       "save": "Salvar",
-      "cancel": "Cancelar"
+      "cancel": "Cancelar",
+      "sort": "Ordenar itens ativos alfabeticamente"
     },
     "item": {
       "quantity": "Qtd",
       "price": "Preço",
       "total": "TOTAL"
+    },
+    "sort": {
+      "label": "Ordenar: ",
+      "default": "Padrão",
+      "alpha": "A-Z"
     },
     "offline": "Você está offline - as alterações serão sincronizadas quando a conexão for restaurada",
     "update": {

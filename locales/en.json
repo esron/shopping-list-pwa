@@ -40,12 +40,18 @@
       "paste": "Paste",
       "edit": "Edit",
       "save": "Save",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "sort": "Sort active items alphabetically"
     },
     "item": {
       "quantity": "Qty",
       "price": "Price",
       "total": "TOTAL"
+    },
+    "sort": {
+      "label": "Sort: ",
+      "default": "Default",
+      "alpha": "A-Z"
     },
     "offline": "You're offline - changes will sync when connection is restored",
     "update": {

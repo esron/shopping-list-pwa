@@ -4,6 +4,7 @@ class ShoppingListApp {
         this.items = [];
         this.completedItems = [];
         this.searchQuery = '';
+        this.sortBy = 'default';
         this.init();
     }
 
@@ -33,6 +34,7 @@ class ShoppingListApp {
     loadFromStorage() {
         const savedItems = localStorage.getItem('shopping-list-items');
         const savedCompleted = localStorage.getItem('shopping-list-completed');
+        const savedSort = localStorage.getItem('shopping-list-sort');
 
         if (savedItems) {
             this.items = JSON.parse(savedItems);
@@ -41,12 +43,17 @@ class ShoppingListApp {
         if (savedCompleted) {
             this.completedItems = JSON.parse(savedCompleted);
         }
+
+        if (savedSort) {
+            this.sortBy = savedSort;
+        }
     }
 
     // Save data to localStorage
     saveToStorage() {
         localStorage.setItem('shopping-list-items', JSON.stringify(this.items));
         localStorage.setItem('shopping-list-completed', JSON.stringify(this.completedItems));
+        localStorage.setItem('shopping-list-sort', this.sortBy);
     }
 
     // Setup event listeners
@@ -114,6 +121,12 @@ class ShoppingListApp {
             pasteButton.addEventListener('click', () => this.triggerImportFromPaste());
         }
 
+        // Sort button
+        const sortButton = document.getElementById('sort-button');
+        if (sortButton) {
+            sortButton.addEventListener('click', () => this.toggleSort());
+        }
+
         // Search input
         const searchInput = document.getElementById('search-input');
         const clearSearch = document.getElementById('clear-search');
@@ -161,7 +174,8 @@ class ShoppingListApp {
             id: Date.now().toString(),
             text: text,
             completed: false,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            isNew: true
         };
 
         this.items.unshift(item); // Add to beginning
@@ -220,7 +234,7 @@ class ShoppingListApp {
     // Create item HTML
     createItemElement(item, isCompleted = false) {
         const li = document.createElement('li');
-        li.className = `item ${isCompleted ? 'completed' : ''}`;
+        li.className = `item ${isCompleted ? 'completed' : ''} ${item.isNew ? 'new-item' : ''}`;
         li.dataset.id = item.id;
 
         const deleteLabel = window.i18n ? window.i18n.t('ui.actions.delete') : 'Delete item';
@@ -407,8 +421,14 @@ class ShoppingListApp {
         completedList.innerHTML = '';
 
         // Filter items based on search query
-        const filteredItems = this.filterItems(this.items);
+        let filteredItems = this.filterItems(this.items);
         const filteredCompleted = this.filterItems(this.completedItems);
+
+        // Sort active items if alphabetical sorting is active
+        if (this.sortBy === 'alpha') {
+            const lang = window.i18n?.currentLang || 'en';
+            filteredItems = [...filteredItems].sort((a, b) => a.text.localeCompare(b.text, lang, { sensitivity: 'base' }));
+        }
 
         // Render active items
         if (this.items.length === 0) {
@@ -436,6 +456,21 @@ class ShoppingListApp {
 
         // Update stats
         this.updateStats();
+
+        // Update sort button UI text
+        this.updateSortButtonUI();
+
+        // Clear isNew flags from active items so they don't animate next time
+        let hasNew = false;
+        this.items.forEach(item => {
+            if (item.isNew) {
+                delete item.isNew;
+                hasNew = true;
+            }
+        });
+        if (hasNew) {
+            this.saveToStorage();
+        }
     }
 
     // Update statistics
@@ -493,6 +528,27 @@ class ShoppingListApp {
             completedTotalAmount.textContent = this.formatPrice(completedTotal);
         } else {
             completedTotalDiv.style.display = 'none';
+        }
+    }
+
+    // Toggle sorting order
+    toggleSort() {
+        this.sortBy = this.sortBy === 'default' ? 'alpha' : 'default';
+        this.saveToStorage();
+        this.render();
+    }
+
+    // Update sort button text and localization
+    updateSortButtonUI() {
+        const sortLabel = document.getElementById('sort-label');
+        if (!sortLabel) return;
+
+        if (window.i18n) {
+            const labelKey = this.sortBy === 'alpha' ? 'ui.sort.alpha' : 'ui.sort.default';
+            const sortPrefix = window.i18n.t('ui.sort.label');
+            sortLabel.textContent = sortPrefix + window.i18n.t(labelKey);
+        } else {
+            sortLabel.textContent = this.sortBy === 'alpha' ? 'Sort: A-Z' : 'Sort: Default';
         }
     }
 
