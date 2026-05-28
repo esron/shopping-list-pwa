@@ -20,12 +20,17 @@
     },
     "sections": {
       "shoppingList": "Shopping List",
-      "completedItems": "Completed Items"
+      "completedItems": "Completed Items",
+      "collapse": "Collapse",
+      "expand": "Expand",
+      "templates": "Saved Templates"
     },
     "empty": {
       "shopping": "Your shopping list is empty",
       "shoppingSubtext": "Add items above to get started!",
-      "completed": "No completed items yet"
+      "completed": "No completed items yet",
+      "templates": "No saved templates yet",
+      "templatesSubtext": "Save your current list as a template to reuse it later!"
     },
     "stats": {
       "item": "item",
@@ -41,7 +46,9 @@
       "edit": "Edit",
       "save": "Save",
       "cancel": "Cancel",
-      "sort": "Sort active items alphabetically"
+      "sort": "Sort active items alphabetically",
+      "saveTemplate": "Save Current",
+      "apply": "Apply"
     },
     "item": {
       "quantity": "Qty",
@@ -52,6 +59,11 @@
       "label": "Sort: ",
       "default": "Default",
       "alpha": "A-Z"
+    },
+    "template": {
+      "placeholder": "Template name (e.g., Weekly)...",
+      "item": "item",
+      "items": "items"
     },
     "offline": "You're offline - changes will sync when connection is restored",
     "update": {
@@ -70,6 +82,9 @@
     "itemDeleted": "Item deleted",
     "importError": "Failed to import. Paste a list with one item per line. Use [x] before completed items.",
     "copyRequiresHttps": "Copy requires a secure connection (HTTPS).",
-    "installPrompt": "Install this app for the best experience!"
+    "installPrompt": "Install this app for the best experience!",
+    "templateSaved": "Template saved successfully",
+    "templateDeleted": "Template deleted",
+    "templateApplied": "Template items applied to your list"
   }
 }

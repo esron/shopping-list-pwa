@@ -20,12 +20,17 @@
     },
     "sections": {
       "shoppingList": "Lista de Compras",
-      "completedItems": "Itens Concluídos"
+      "completedItems": "Itens Concluídos",
+      "collapse": "Recolher",
+      "expand": "Expandir",
+      "templates": "Modelos Salvos"
     },
     "empty": {
       "shopping": "Sua lista de compras está vazia",
       "shoppingSubtext": "Adicione itens acima para começar!",
-      "completed": "Nenhum item concluído ainda"
+      "completed": "Nenhum item concluído ainda",
+      "templates": "Nenhum modelo salvo ainda",
+      "templatesSubtext": "Salve sua lista atual como um modelo para reutilizá-la mais tarde!"
     },
     "stats": {
       "item": "item",
@@ -41,7 +46,9 @@
       "edit": "Editar",
       "save": "Salvar",
       "cancel": "Cancelar",
-      "sort": "Ordenar itens ativos alfabeticamente"
+      "sort": "Ordenar itens ativos alfabeticamente",
+      "saveTemplate": "Salvar Atual",
+      "apply": "Aplicar"
     },
     "item": {
       "quantity": "Qtd",
@@ -52,6 +59,11 @@
       "label": "Ordenar: ",
       "default": "Padrão",
       "alpha": "A-Z"
+    },
+    "template": {
+      "placeholder": "Nome do modelo (ex: Semanal)...",
+      "item": "item",
+      "items": "itens"
     },
     "offline": "Você está offline - as alterações serão sincronizadas quando a conexão for restaurada",
     "update": {
@@ -70,6 +82,9 @@
     "itemDeleted": "Item excluído",
     "importError": "Falha ao importar. Cole uma lista com um item por linha. Use [x] antes dos itens concluídos.",
     "copyRequiresHttps": "Copiar requer uma conexão segura (HTTPS).",
-    "installPrompt": "Instale este app para uma melhor experiência!"
+    "installPrompt": "Instale este app para uma melhor experiência!",
+    "templateSaved": "Modelo salvo com sucesso",
+    "templateDeleted": "Modelo excluído",
+    "templateApplied": "Itens do modelo aplicados à sua lista"
   }
 }

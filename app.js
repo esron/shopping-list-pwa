@@ -5,6 +5,8 @@ class ShoppingListApp {
         this.completedItems = [];
         this.searchQuery = '';
         this.sortBy = 'default';
+        this.templates = [];
+        this.completedCollapsed = false;
         this.init();
     }
 
@@ -35,6 +37,8 @@ class ShoppingListApp {
         const savedItems = localStorage.getItem('shopping-list-items');
         const savedCompleted = localStorage.getItem('shopping-list-completed');
         const savedSort = localStorage.getItem('shopping-list-sort');
+        const savedTemplates = localStorage.getItem('shopping-list-templates');
+        const savedCollapsed = localStorage.getItem('shopping-list-completed-collapsed');
 
         if (savedItems) {
             this.items = JSON.parse(savedItems);
@@ -47,6 +51,14 @@ class ShoppingListApp {
         if (savedSort) {
             this.sortBy = savedSort;
         }
+
+        if (savedTemplates) {
+            this.templates = JSON.parse(savedTemplates);
+        }
+
+        if (savedCollapsed !== null) {
+            this.completedCollapsed = savedCollapsed === 'true';
+        }
     }
 
     // Save data to localStorage
@@ -54,6 +66,8 @@ class ShoppingListApp {
         localStorage.setItem('shopping-list-items', JSON.stringify(this.items));
         localStorage.setItem('shopping-list-completed', JSON.stringify(this.completedItems));
         localStorage.setItem('shopping-list-sort', this.sortBy);
+        localStorage.setItem('shopping-list-templates', JSON.stringify(this.templates));
+        localStorage.setItem('shopping-list-completed-collapsed', this.completedCollapsed);
     }
 
     // Setup event listeners
@@ -125,6 +139,51 @@ class ShoppingListApp {
         const sortButton = document.getElementById('sort-button');
         if (sortButton) {
             sortButton.addEventListener('click', () => this.toggleSort());
+        }
+
+        // Collapse completed button
+        const collapseBtn = document.getElementById('collapse-completed-button');
+        if (collapseBtn) {
+            collapseBtn.addEventListener('click', () => this.toggleCompletedCollapse());
+        }
+
+        // Save Template button
+        const saveTemplateBtn = document.getElementById('save-template-button');
+        if (saveTemplateBtn) {
+            saveTemplateBtn.addEventListener('click', () => {
+                const form = document.getElementById('template-save-form');
+                const isFormVisible = form && form.style.display === 'flex';
+                this.toggleTemplateSaveForm(!isFormVisible);
+            });
+        }
+
+        // Cancel save template button
+        const cancelSaveTemplateBtn = document.getElementById('cancel-save-template');
+        if (cancelSaveTemplateBtn) {
+            cancelSaveTemplateBtn.addEventListener('click', () => {
+                this.toggleTemplateSaveForm(false);
+            });
+        }
+
+        // Confirm save template button
+        const confirmSaveTemplateBtn = document.getElementById('confirm-save-template');
+        if (confirmSaveTemplateBtn) {
+            confirmSaveTemplateBtn.addEventListener('click', () => {
+                this.saveCurrentAsTemplate();
+            });
+        }
+
+        // Enter key on template input
+        const templateInput = document.getElementById('template-name-input');
+        if (templateInput) {
+            templateInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.saveCurrentAsTemplate();
+                } else if (e.key === 'Escape') {
+                    this.toggleTemplateSaveForm(false);
+                }
+            });
         }
 
         // Search input
@@ -454,11 +513,29 @@ class ShoppingListApp {
             });
         }
 
+        // Apply collapse state — always expand when a search is active
+        const completedBody = document.getElementById('completed-body');
+        const completedSection = document.querySelector('.completed-section');
+        const collapseLabel = document.getElementById('collapse-completed-label');
+        const collapseBtn = document.getElementById('collapse-completed-button');
+        const isCollapsed = this.completedCollapsed && !this.searchQuery;
+
+        if (completedBody) completedBody.classList.toggle('collapsed', isCollapsed);
+        if (completedSection) completedSection.classList.toggle('is-collapsed', isCollapsed);
+        if (collapseBtn) collapseBtn.setAttribute('aria-expanded', String(!isCollapsed));
+        if (collapseLabel) {
+            const collapseKey = isCollapsed ? 'ui.sections.expand' : 'ui.sections.collapse';
+            collapseLabel.textContent = window.i18n ? window.i18n.t(collapseKey) : (isCollapsed ? 'Expand' : 'Collapse');
+        }
+
         // Update stats
         this.updateStats();
 
         // Update sort button UI text
         this.updateSortButtonUI();
+
+        // Render templates list
+        this.renderTemplates();
 
         // Clear isNew flags from active items so they don't animate next time
         let hasNew = false;
@@ -538,6 +615,13 @@ class ShoppingListApp {
         this.render();
     }
 
+    // Toggle collapse state of completed items section
+    toggleCompletedCollapse() {
+        this.completedCollapsed = !this.completedCollapsed;
+        this.saveToStorage();
+        this.render();
+    }
+
     // Update sort button text and localization
     updateSortButtonUI() {
         const sortLabel = document.getElementById('sort-label');
@@ -549,6 +633,152 @@ class ShoppingListApp {
             sortLabel.textContent = sortPrefix + window.i18n.t(labelKey);
         } else {
             sortLabel.textContent = this.sortBy === 'alpha' ? 'Sort: A-Z' : 'Sort: Default';
+        }
+    }
+
+    // Toggle showing template save form
+    toggleTemplateSaveForm(show) {
+        const form = document.getElementById('template-save-form');
+        const input = document.getElementById('template-name-input');
+        if (!form) return;
+
+        if (show) {
+            form.style.display = 'flex';
+            if (input) input.focus();
+        } else {
+            form.style.display = 'none';
+            if (input) input.value = '';
+        }
+    }
+
+    // Save current active and completed items as a template
+    saveCurrentAsTemplate() {
+        const nameInput = document.getElementById('template-name-input');
+        if (!nameInput) return;
+        
+        const name = nameInput.value.trim();
+        if (!name) return;
+
+        // Aggregate both active and completed items
+        const templateItems = [
+            ...this.items.map(item => ({ text: item.text, quantity: item.quantity || null, price: item.price || null })),
+            ...this.completedItems.map(item => ({ text: item.text, quantity: item.quantity || null, price: item.price || null }))
+        ];
+
+        if (templateItems.length === 0) {
+            const msg = window.i18n ? window.i18n.t('ui.empty.shopping') : 'Your list is empty';
+            alert(msg);
+            return;
+        }
+
+        // Check if template with same name already exists (Overwrite)
+        const existingIndex = this.templates.findIndex(t => t.name.toLowerCase() === name.toLowerCase());
+
+        const newTemplate = {
+            id: Date.now().toString() + Math.random().toString(36).slice(2),
+            name: name,
+            items: templateItems,
+            createdAt: new Date().toISOString()
+        };
+
+        if (existingIndex !== -1) {
+            this.templates[existingIndex] = newTemplate;
+        } else {
+            this.templates.unshift(newTemplate);
+        }
+
+        this.saveToStorage();
+        this.toggleTemplateSaveForm(false);
+        nameInput.value = '';
+        this.render();
+
+        const successMsg = window.i18n ? window.i18n.t('messages.templateSaved') : 'Template saved successfully';
+        alert(successMsg);
+    }
+
+    // Apply template items to the active list
+    applyTemplate(templateId) {
+        const template = this.templates.find(t => t.id === templateId);
+        if (!template) return;
+
+        let itemsAdded = 0;
+        template.items.forEach(tempItem => {
+            // Check if item already exists in active items (case-insensitive)
+            const exists = this.items.some(item => item.text.toLowerCase() === tempItem.text.toLowerCase());
+            if (!exists) {
+                const newItem = {
+                    id: Date.now().toString() + Math.random().toString(36).slice(2),
+                    text: tempItem.text,
+                    completed: false,
+                    createdAt: new Date().toISOString(),
+                    quantity: tempItem.quantity || null,
+                    price: tempItem.price || null,
+                    isNew: true
+                };
+                this.items.push(newItem);
+                itemsAdded++;
+            }
+        });
+
+        // Clear completed items when applying a template
+        this.completedItems = [];
+
+        this.saveToStorage();
+        this.render();
+
+        const successMsg = window.i18n ? window.i18n.t('messages.templateApplied') : 'Template items applied';
+        alert(successMsg);
+    }
+
+    // Delete a saved template
+    deleteTemplate(templateId) {
+        const index = this.templates.findIndex(t => t.id === templateId);
+        if (index !== -1) {
+            this.templates.splice(index, 1);
+            this.saveToStorage();
+            this.render();
+            
+            const deleteMsg = window.i18n ? window.i18n.t('messages.templateDeleted') : 'Template deleted';
+            alert(deleteMsg);
+        }
+    }
+
+    // Render templates list
+    renderTemplates() {
+        const templatesList = document.getElementById('templates-list');
+        const emptyState = document.getElementById('templates-empty-state');
+        if (!templatesList || !emptyState) return;
+
+        templatesList.innerHTML = '';
+
+        if (this.templates.length === 0) {
+            emptyState.style.display = 'block';
+        } else {
+            emptyState.style.display = 'none';
+            this.templates.forEach(template => {
+                const li = document.createElement('li');
+                li.className = 'template-item';
+                li.dataset.id = template.id;
+
+                const countText = window.i18n ? 
+                    window.i18n.formatCount(template.items.length, 'ui.template.item', 'ui.template.items') :
+                    (template.items.length === 1 ? '1 item' : `${template.items.length} items`);
+
+                const applyLabel = window.i18n ? window.i18n.t('ui.actions.apply') : 'Apply';
+                const deleteLabel = window.i18n ? window.i18n.t('ui.actions.delete') : 'Delete';
+
+                li.innerHTML = `
+                    <div class="template-item-content">
+                         <span class="template-name">${this.escapeHtml(template.name)}</span>
+                         <span class="template-count">${countText}</span>
+                    </div>
+                    <div class="template-actions">
+                         <button class="template-apply-btn" onclick="app.applyTemplate('${template.id}')" aria-label="${applyLabel}">${applyLabel}</button>
+                         <button class="template-delete-btn" onclick="app.deleteTemplate('${template.id}')" aria-label="${deleteLabel}">×</button>
+                    </div>
+                `;
+                templatesList.appendChild(li);
+            });
         }
     }
 

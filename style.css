@@ -516,6 +516,30 @@ h2::before {
     color: var(--ink-light);
 }
 
+/* Collapsible completed body */
+#completed-body {
+    overflow: hidden;
+    max-height: 9999px;
+    transition: max-height 0.35s ease, opacity 0.25s ease;
+    opacity: 1;
+}
+
+#completed-body.collapsed {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Rotate collapse icon when collapsed */
+#collapse-completed-icon {
+    display: inline-block;
+    transition: transform 0.25s ease;
+}
+
+.completed-section.is-collapsed #collapse-completed-icon {
+    transform: rotate(-90deg);
+}
+
 /* Item lists */
 .item-list {
     list-style: none;
@@ -1162,6 +1186,203 @@ footer {
     to {
         transform: rotate(360deg);
     }
+}
+
+/* ============ TEMPLATES SECTION ============ */
+.templates-section {
+    margin-bottom: 2rem;
+    animation: fadeSlideDown 0.6s ease-out 0.4s backwards;
+}
+
+.template-save-form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem;
+    border: 2px solid var(--ink-black);
+    background: var(--paper-white);
+    animation: printLine 0.3s ease-out;
+    flex-direction: column;
+}
+
+.template-save-form input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--ink-gray);
+    background: transparent;
+    color: var(--ink-black);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+}
+
+.template-save-form input:focus {
+    outline: none;
+    border-color: var(--ink-black);
+}
+
+.template-save-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.template-save-actions button {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid var(--ink-black);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+#confirm-save-template {
+    background: var(--ink-black);
+    color: var(--paper-yellow);
+}
+
+#confirm-save-template:hover {
+    background: var(--receipt-green);
+    border-color: var(--receipt-green);
+}
+
+#cancel-save-template {
+    background: transparent;
+    color: var(--ink-black);
+}
+
+#cancel-save-template:hover {
+    background: var(--ink-black);
+    color: var(--paper-yellow);
+}
+
+.templates-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.template-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.625rem 0.5rem;
+    border-bottom: 1px dotted var(--dotted-line);
+    font-size: 0.9375rem;
+    animation: printLine 0.3s ease-out;
+}
+
+.template-item:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.template-item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.template-name {
+    font-weight: 600;
+    color: var(--ink-black);
+    word-break: break-word;
+}
+
+.template-count {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.template-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.template-apply-btn {
+    background: transparent;
+    border: 1px solid var(--ink-black);
+    color: var(--ink-black);
+    padding: 0.375rem 0.75rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.template-apply-btn:hover {
+    background: var(--ink-black);
+    color: var(--paper-yellow);
+}
+
+.template-apply-btn:active {
+    transform: translateY(1px);
+}
+
+.template-delete-btn {
+    background: transparent;
+    color: var(--receipt-red);
+    border: 1px solid var(--receipt-red);
+    width: 1.75rem;
+    height: 1.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1;
+    transition: all 0.2s;
+    font-family: 'IBM Plex Mono', monospace;
+}
+
+.template-delete-btn:hover {
+    background: var(--receipt-red);
+    color: white;
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.template-delete-btn:active {
+    transform: scale(0.95);
+}
+
+.templates-empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: var(--ink-light);
+    font-style: italic;
+    border: 1px dashed var(--dotted-line);
+    background: rgba(0, 0, 0, 0.01);
+}
+
+.templates-empty-state p:first-child {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.templates-empty-state p:first-child::before {
+    content: '- - - - - - - - - - - - - - - -';
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
+}
+
+.templates-empty-state p:first-child::after {
+    content: '- - - - - - - - - - - - - - - -';
+    display: block;
+    margin-top: 0.75rem;
+    font-size: 0.625rem;
+    letter-spacing: 0.2em;
 }
 
 /* ============ RESPONSIVE DESIGN ============ */

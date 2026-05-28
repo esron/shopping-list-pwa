@@ -102,16 +102,56 @@
 
             <!-- Completed Items -->
             <section class="completed-section">
-                <h2 data-i18n="ui.sections.completedItems">Completed Items</h2>
-                <ul id="completed-list" class="item-list completed">
-                    <!-- Completed items will be dynamically added here -->
-                </ul>
-                <div id="completed-empty-state" class="empty-state">
-                    <p data-i18n="ui.empty.completed">No completed items yet</p>
+                <div class="section-header">
+                    <h2 data-i18n="ui.sections.completedItems">Completed Items</h2>
+                    <button type="button" id="collapse-completed-button" class="sort-button" aria-expanded="true">
+                        <span id="collapse-completed-icon">▾</span> <span id="collapse-completed-label">Collapse</span>
+                    </button>
                 </div>
-                <div id="completed-total" class="list-total" style="display: none;">
-                    <span class="total-label" data-i18n="ui.item.total">TOTAL</span>
-                    <span id="completed-total-amount" class="total-amount">$0.00</span>
+                <div id="completed-body">
+                    <ul id="completed-list" class="item-list completed">
+                        <!-- Completed items will be dynamically added here -->
+                    </ul>
+                    <div id="completed-empty-state" class="empty-state">
+                        <p data-i18n="ui.empty.completed">No completed items yet</p>
+                    </div>
+                    <div id="completed-total" class="list-total" style="display: none;">
+                        <span class="total-label" data-i18n="ui.item.total">TOTAL</span>
+                        <span id="completed-total-amount" class="total-amount">$0.00</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Templates Section -->
+            <section class="templates-section">
+                <div class="section-header">
+                    <h2 data-i18n="ui.sections.templates">Saved Templates</h2>
+                    <button type="button" id="save-template-button" class="sort-button" data-i18n="ui.actions.saveTemplate">Save Current</button>
+                </div>
+                
+                <!-- Inline Save Template Form -->
+                <div id="template-save-form" class="template-save-form" style="display: none;">
+                    <input
+                        type="text"
+                        id="template-name-input"
+                        placeholder="Template name (e.g., Weekly)..."
+                        data-i18n-placeholder="ui.template.placeholder"
+                        autocomplete="off"
+                    >
+                    <div class="template-save-actions">
+                        <button type="button" id="confirm-save-template" data-i18n="ui.actions.save">Save</button>
+                        <button type="button" id="cancel-save-template" data-i18n="ui.actions.cancel">Cancel</button>
+                    </div>
+                </div>
+
+                <div id="templates-list-container">
+                    <ul id="templates-list" class="templates-list">
+                        <!-- Templates will be dynamically added here -->
+                    </ul>
+                    <div id="templates-empty-state" class="templates-empty-state">
+                        <p data-i18n="ui.empty.templates">No saved templates yet</p>
+                        <p data-i18n="ui.empty.templatesSubtext">Save your current list as a template to reuse it later!</p>
+                    </div>
                 </div>
             </section>
         </main>
